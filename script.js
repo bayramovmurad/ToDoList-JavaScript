@@ -20,12 +20,13 @@ function displayTask(filter) {
 
     ul.innerHTML = "";
     if (gorevListesi.length == '') {
-        ul.innerHTML = "<p class='p-3 m-0'>Gorev listeniz bos</p>"
+        ul.innerHTML = "<p class='p-3 m-0'>Task list is empty...</p>"
     }
 
     for (let gorev of gorevListesi) {
 
         let completed = gorev.durum == "completed" ? "checked" : "";
+
 
         if (filter == gorev.durum || filter == "all") {
             let li = `
@@ -33,15 +34,14 @@ function displayTask(filter) {
 <li class="task border-bottom border-secondary bg-black text-white list-group-item">
 <div class="form-check">
  <input type="checkbox" onclick="uptadeStatus(this)" id="${gorev.id}" class="form-check-input " ${completed}>
- <label for="${gorev.id}" class="form-check-label ${completed}">${gorev.GorevAdi}</label>
-
+ <label for="${gorev.id}" class="form-check-label data-text="${gorev.GorevAdi}" ${completed}">${gorev.GorevAdi}</label>
 </div>
 <div class="dropdown">
 <button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
 </button>
   <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-       <li><a onclick="deleteTask(${gorev.id})" class="dropdown-item" href="#"><i class="bi bi-trash"></i> Sil</a></li>
-       <li><a onclick='editTask(${gorev.id}, "${gorev.GorevAdi}")' class="dropdown-item" href="#"><i class="bi bi-pencil"></i> Duzenle</a></li>
+       <li><a onclick="deleteTask(${gorev.id})" class="dropdown-item" href="#"><i class="bi bi-trash"></i></a></li>
+       <li><a onclick='editTask(${gorev.id}, "${gorev.GorevAdi}")' class="dropdown-item" href="#"><i class="bi bi-pencil"></i></a></li>
  </ul>
 </div>
 </li>
@@ -67,6 +67,7 @@ document.getElementById('btnAddNewTask').addEventListener("keypress", () => {
     }
 
 })
+
 
 
 function newTask(e) {
@@ -152,7 +153,9 @@ function uptadeStatus(selectedTask) {
             gorev.durum = durum;
         }
     }
-
-    localStorage.setItem("gorevListesi", JSON.stringify(gorevListesi));
     displayTask(document.querySelector('span.active').id);
+    localStorage.setItem("gorevListesi", JSON.stringify(gorevListesi));
+   
 }
+
+
