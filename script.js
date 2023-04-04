@@ -1,9 +1,9 @@
 "use strict"
 
-let gorevListesi = [];
+let taskList = [];
 
-if(localStorage.getItem("gorevListesi") !== null){
-    gorevListesi = JSON.parse(localStorage.getItem("gorevListesi"));
+if(localStorage.getItem("taskList") !== null){
+    taskList = JSON.parse(localStorage.getItem("taskList"));
 }
 
 let editId;
@@ -15,33 +15,35 @@ const filters = document.querySelectorAll(".filters span")
 
 displayTask("all");
 
-function displayTask(filter) {
-    let ul = document.getElementById("task-list");
+// Task screen
 
+function displayTask(filter) {
+    // action to be taken if there is no task
+    let ul = document.getElementById("task-list");
     ul.innerHTML = "";
-    if (gorevListesi.length == '') {
+    if (taskList.length == '') {
         ul.innerHTML = "<p class='p-3 m-0'>Task list is empty...</p>"
     }
+    
+    for (let task of taskList) {
+        // status action
+        let completed = task.status == "completed" ? "checked" : "";
 
-    for (let gorev of gorevListesi) {
 
-        let completed = gorev.durum == "completed" ? "checked" : "";
-
-
-        if (filter == gorev.durum || filter == "all") {
+        if (filter == task.status || filter == "all") {
             let li = `
 
 <li class="task border-bottom border-secondary bg-black text-white list-group-item">
 <div class="form-check">
- <input type="checkbox" onclick="uptadeStatus(this)" id="${gorev.id}" class="form-check-input " ${completed}>
- <label for="${gorev.id}" class="form-check-label data-text="${gorev.GorevAdi}" ${completed}">${gorev.GorevAdi}</label>
+ <input type="checkbox" onclick="uptadeStatus(this)" id="${task.id}" class="form-check-input" ${completed}>
+ <label for="${task.id}" class="form-check-label data-text="${task.taskName}" ${completed}>${task.taskName}</label>
 </div>
 <div class="dropdown">
 <button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
 </button>
   <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-       <li><a onclick="deleteTask(${gorev.id})" class="dropdown-item" href="#"><i class="bi bi-trash"></i></a></li>
-       <li><a onclick='editTask(${gorev.id}, "${gorev.GorevAdi}")' class="dropdown-item" href="#"><i class="bi bi-pencil"></i></a></li>
+       <li><a onclick="deleteTask(${task.id})" class="dropdown-item" href="#"><i class="bi bi-trash"></i></a></li>
+       <li><a onclick='editTask(${task.id}, "${task.taskName}")' class="dropdown-item" href="#"><i class="bi bi-pencil"></i></a></li>
  </ul>
 </div>
 </li>
@@ -69,18 +71,18 @@ document.getElementById('btnAddNewTask').addEventListener("keypress", () => {
 })
 
 
-
+// Function to create a new task
 function newTask(e) {
 
     if (nextTask.value == "") {
-        alert("Lutfen bir gorev giriniz.")
+        alert("Please enter a task.")
     } else {
         if (!isEditTask) {
-            gorevListesi.push({ "id": gorevListesi.length + 1, "GorevAdi": nextTask.value, "durum": "pending" });
+            taskList.push({ "id": taskList.length + 1, "taskName": nextTask.value, "status": "pending" });
         } else {
-            for (let gorev of gorevListesi) {
-                if (gorev.id == editId) {
-                    gorev.GorevAdi = nextTask.value;
+            for (let task of taskList) {
+                if (task.id == editId) {
+                    task.taskName = nextTask.value;
                 }
                 isEditTask = false;
             }
@@ -89,7 +91,7 @@ function newTask(e) {
 
         nextTask.value = '';
         displayTask(document.querySelector('span.active').id);
-        localStorage.setItem("gorevListesi", JSON.stringify(gorevListesi));
+        localStorage.setItem("taskList", JSON.stringify(taskList));
     }
 
 
@@ -97,19 +99,22 @@ function newTask(e) {
     e.preventDefault()
 }
 
+// function to delete a task
 
 function deleteTask(id) {
     let deleteId;
-    for (let index in gorevListesi) {
-        if (gorevListesi[index].id == id) {
+    for (let index in taskList) {
+        if (taskList[index].id == id) {
             deleteId = index;
         }
 
     }
-    gorevListesi.splice(deleteId, 1);
+    taskList.splice(deleteId, 1);
     displayTask(document.querySelector('span.active').id);
-    localStorage.setItem("gorevListesi", JSON.stringify(gorevListesi));
+    localStorage.setItem("taskList", JSON.stringify(taskList));
 }
+
+// function to edit a task
 
 function editTask(taskId, taskName) {
     editId = taskId;
@@ -119,12 +124,16 @@ function editTask(taskId, taskName) {
     nextTask.classList.add("active")
 }
 
+// method to delete all tasks
+
 btnClear.addEventListener('click', function () {
-    gorevListesi.splice(0, gorevListesi.length)
-    localStorage.clear(gorevListesi)
+    taskList.splice(0, taskList.length)
+    localStorage.clear(taskList)
     displayTask()
 
 })
+
+// information about the current situation
 
 for (let span of filters) {
     span.addEventListener("click", function () {
@@ -133,28 +142,30 @@ for (let span of filters) {
         displayTask(span.id)
 
     })
-    localStorage.setItem("gorevListesi", JSON.stringify(gorevListesi));
+    localStorage.setItem("taskList", JSON.stringify(taskList));
 }
 
+// activating the checkbox of tasks
 
 function uptadeStatus(selectedTask) {
     let label = selectedTask.nextElementSibling;
-    let durum;
+    let status;
     if (selectedTask.checked) {
         label.classList.add("checked")
-        durum = "completed";
+        status = "completed";
     } else {
         label.classList.remove("checked")
-        durum = "pending";
+        status = "pending";
     }
 
-    for (let gorev of gorevListesi) {
-        if (gorev.id == selectedTask.id) {
-            gorev.durum = durum;
+    for (let task of taskList) {
+        if (task.id == selectedTask.id) {
+            task.status = status;
         }
     }
+    console.log(taskList);
     displayTask(document.querySelector('span.active').id);
-    localStorage.setItem("gorevListesi", JSON.stringify(gorevListesi));
+    localStorage.setItem("taskList", JSON.stringify(taskList));
    
 }
 

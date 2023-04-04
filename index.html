@@ -17,9 +17,7 @@
         justify-content: space-between;
     }
 
-    .task label.checked {
-        text-decoration: line-through;
-    }
+   
 
     .controls {
         display: flex;
@@ -27,6 +25,7 @@
         justify-content: space-between;
     }
 
+    /*style related to drum categories */
     .filters span.active {
         color: #3c87ff;
     }
@@ -39,10 +38,12 @@
     .btn-warning {
         color: #fff !important;
     }
-    ul .dropdown-menu{
+
+    ul .dropdown-menu {
         min-width: 1rem;
     }
-    .btn{
+
+    .btn {
         color: #fff !important;
     }
 
@@ -51,7 +52,6 @@
             font-size: 80%;
         }
     }
-  
 </style>
 
 <body class="bg-dark">
@@ -59,6 +59,7 @@
     <div class="container mt-4">
         <div class="row">
             <div class="col-12">
+                <!-- space to enter tasks -->
                 <div class="card bg-black text-white">
                     <div class="card-header">
                         Todo App
@@ -76,7 +77,7 @@
                     </div>
                 </div>
                 <div class="card mt-3 bg-black text-white">
-
+                    <!-- the field that divides the tasks into categories within itself -->
                     <div class="card-header controls">
                         <div class="filters">
                             <span class="active" id="all">
@@ -93,6 +94,7 @@
                             Clear
                         </button>
                     </div>
+                    <!-- field that lists tasks -->
                     <ul id="task-list" class="  list-group list-group-flush">
 
                     </ul>
