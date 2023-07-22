@@ -36,7 +36,7 @@ function displayTask(filter) {
 <li class="task border-bottom border-secondary bg-black text-white list-group-item">
 <div class="form-check">
  <input type="checkbox" onclick="uptadeStatus(this)" id="${task.id}" class="form-check-input" ${completed}>
- <label for="${task.id}" class="form-check-label data-text="${task.taskName}" ${completed}>${task.taskName}</label>
+ <label for="${task.id}" class="form-check-label ${completed}">${task.taskName}</label>
 </div>
 <div class="dropdown">
 <button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
